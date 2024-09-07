@@ -1,17 +1,34 @@
 {
   "name": "huawei-obs-plugin",
   "version": "1.0.2",
-  "description": "",
+  "description": "A webpack plugin for uploading assets to Huawei OBS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "webpack",
+    "plugin",
+    "huawei",
+    "obs",
+    "upload"
+  ],
+  "author": "jameslam",
   "license": "ISC",
   "dependencies": {
     "ansi-colors": "^4.1.1",
     "esdk-obs-nodejs": "^3.1.3",
     "fancy-log": "^1.3.3"
-  }
+  },
+  "peerDependencies": {
+    "webpack": "^4.0.0 || ^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/James-Lam/huawei-obs-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/James-Lam/huawei-obs-plugin/issues"
+  },
+  "homepage": "https://github.com/James-Lam/huawei-obs-plugin#readme"
 }
