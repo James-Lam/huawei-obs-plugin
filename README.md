@@ -1,11 +1,11 @@
-# [huawei-obs-plugin](https://github.com/staven630/huawei-obs-plugin)
+# [webpack-obs-upload-plugin](https://github.com/James-Lam/webpack-obs-upload-plugin)
 
 > 静态资源一键上传华为云 obs 插件。可单独作为 node.js 库使用，也可作为 webpack 插件 （兼容 webpack3.x 以上版本）
 
 # 安装
 
 ```
-npm i huawei-obs-plugin --save-dev
+npm i webpack-obs-upload-plugin --save-dev
 ```
 
 # 参数
@@ -22,6 +22,7 @@ npm i huawei-obs-plugin --save-dev
 | local           | Boolean              | ×        | false  | 默认每次上传 webpack 构建流中文件，设为 true 可上传打包后 webpack output 指向目录里的文件                             |
 | output          | String               | ×        | ''     | 读取本地目录的路径，如果 local 为 true，output 为空，默认为读取 webpack 输出目录                                      |
 | exclude         | ExpReg/Array<ExpReg> | ×        | null   | 可传入正则，或正则组成的数组，来排除上传的文件                                                                        |
+| onSuccess       | Function             | ×        | null   | 上传成功后的回调函数                                                                                                  |
 
 # 静态方法
 
@@ -31,7 +32,7 @@ npm i huawei-obs-plugin --save-dev
 |
 
 ```javascript
-const OBSPlugin = require("huawei-obs-plugin");
+const OBSPlugin = require("webpack-obs-upload-plugin");
 
 OBSPlugin.getFormat();
 OBSPlugin.getFormat("YYYY");
@@ -42,7 +43,7 @@ OBSPlugin.getFormat("YYYY");
 - 使用 webpack 构建流文件上传，并删原有所有资源
 
 ```javascript
-const OBSPlugin = require("huawei-obs-plugin");
+const OBSPlugin = require("webpack-obs-upload-plugin");
 
 new OBSPlugin({
   accessKeyId: "2****************9",
@@ -50,14 +51,14 @@ new OBSPlugin({
   bucket: "staven",
   prefix: "nuxt-doc", // "staven/nuxt-doc/icon_696aaa22.ttf"
   exclude: [/.*\.html$/], // 或者 /.*\.html$/,排除.html文件的上传
-  deleteAll: true // 删除旧文件
+  deleteAll: true, // 删除旧文件
 });
 ```
 
 - 使用打包后的本地文件上传
 
 ```javascript
-const OBSPlugin = require("huawei-obs-plugin");
+const OBSPlugin = require("webpack-obs-upload-plugin");
 const path = require("path");
 
 new OBSPlugin({
@@ -68,14 +69,14 @@ new OBSPlugin({
   prefix: "nuxt-doc", // "staven/nuxt-doc/icon_696aaa22.ttf"
   exclude: [/.*\.html$/], // 或者 /.*\.html$/,排除.html文件的上传
   local: true,
-  output: path.resolve(__dirname, "./build") // 此项不填，将默认指向webpack/vue-cli等工具输出目录
+  output: path.resolve(__dirname, "./build"), // 此项不填，将默认指向webpack/vue-cli等工具输出目录
 });
 ```
 
 - 使用 format 做版本备份
 
 ```javascript
-const OBSPlugin = require('huawei-obs-plugin')
+const OBSPlugin = require('webpack-obs-upload-plugin')
 const time = OBSPlugin.getFormat('YYMMDD')
 
 new OBSPlugin({
@@ -92,12 +93,10 @@ new OBSPlugin({
 })
 ```
 
-# 单独使用
-
-&emsp;&emsp;可以不结合 webpack，单独作为 node.js 库使用。
+- 使用上传成功回调函数
 
 ```javascript
-const OBSPlugin = require("huawei-obs-plugin");
+const OBSPlugin = require("webpack-obs-upload-plugin");
 const path = require("path");
 
 new OBSPlugin({
@@ -108,6 +107,29 @@ new OBSPlugin({
   exclude: null,
   deleteAll: true,
   output: path.resolve(__dirname, "./src"),
-  local: true
+  local: true,
+  onSuccess: () => {
+    console.log("上传成功");
+  },
+}).upload();
+```
+
+# 单独使用
+
+&emsp;&emsp;可以不结合 webpack，单独作为 node.js 库使用。
+
+```javascript
+const OBSPlugin = require("webpack-obs-upload-plugin");
+const path = require("path");
+
+new OBSPlugin({
+  accessKeyId: "2****************9",
+  secretAccessKey: "z**************=",
+  server: "https://obs.cn-east-2.myhuaweicloud.com",
+  bucket: "staven",
+  exclude: null,
+  deleteAll: true,
+  output: path.resolve(__dirname, "./src"),
+  local: true,
 }).upload();
 ```
